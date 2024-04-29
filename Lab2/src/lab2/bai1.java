@@ -5,10 +5,8 @@
 package lab2;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,85 +21,88 @@ public class bai1 extends javax.swing.JFrame {
      */
     DefaultTableModel tblModel;
     ArrayList<SinhVien> list = new ArrayList<>();
+
     public bai1() {
         initComponents();
         txtXepLoai.setEditable(false);
         setLocationRelativeTo(null);
     }
-    
-    
-    public void fillToTable(){
-        String[] columns = {"Ten","Diem","Khoa Hoc"};
-        tblModel = new DefaultTableModel(columns,0);
-        for(SinhVien x : list){
-            Object[] thongTin = {x.getName(),x.getDiem(),x.getCourse()};
+
+    public void fillToTable() {
+        String[] columns = {"Ten", "Diem", "Khoa Hoc", "Xep Loai", "Thuong"};
+        tblModel = new DefaultTableModel(columns, 0);
+        for (SinhVien x : list) {
+            Object[] thongTin = {x.getName(), x.getDiem(), x.getCourse(), x.getXepLoai(), x.isBonus() ? "Thuong" : "Khong Thuong"};
             tblModel.addRow(thongTin);
         }
         tblSinhVien.setModel(tblModel);
     }
-    
-    public void addStudent(){
+
+    public void addStudent() {
         String ten = txtHoVaTen.getText();
         Double diem = Double.parseDouble(txtDiem.getText());
         String mon = txtKhoaHoc.getText();
-        list.add(new SinhVien(ten,diem,mon));
-    }
-    
-    public void removeStudent(){
-        int index = tblSinhVien.getSelectedRow();
-        if(index != -1){
-            list.remove(index);
+        if(diem > 7.5){
+            chkCoPhanThuong.setSelected(true);
         }
-        else JOptionPane.showMessageDialog(this, "Chua chon gia tri");
+        list.add(new SinhVien(ten, diem, mon));
     }
-    
-    public void showDetail(){
+
+    public void removeStudent() {
         int index = tblSinhVien.getSelectedRow();
-        if(index != -1){
+        if (index != -1) {
+            list.remove(index);
+        } else 
+            JOptionPane.showMessageDialog(this, "Chua chon gia tri");
+    }
+
+    public void showDetail() {
+        int index = tblSinhVien.getSelectedRow();
+        if (index != -1) {
             SinhVien sv = list.get(index);
             txtHoVaTen.setText(sv.name);
             txtDiem.setText(String.valueOf(sv.diem));
             txtKhoaHoc.setText(sv.course);
-        }
-        else JOptionPane.showMessageDialog(this, "Chua chon gia tri");
-        
+        } else 
+            JOptionPane.showMessageDialog(this, "Chua chon gia tri");
     }
-    
-    public void updateStudent(){
+
+    public void updateStudent() {
         int index = tblSinhVien.getSelectedRow();
-        if(index != -1){
+        if (index != -1) {
             SinhVien sv = list.get(index);
             sv.setName(txtHoVaTen.getText());
             sv.setDiem(Double.parseDouble(txtDiem.getText()));
             sv.setCourse(txtKhoaHoc.getText());
             txtXepLoai.setText(sv.getXepLoai());
             chkCoPhanThuong.setSelected(sv.isBonus());
-        }else JOptionPane.showMessageDialog(this, "Chua chon gia tri");
+        } else
+            JOptionPane.showMessageDialog(this, "Chua chon gia tri");
     }
-    
-    
-    public void orderByMarks(){
+
+    public void orderByMarks() {
         Comparator<SinhVien> cmp = new Comparator<SinhVien>() {
             @Override
             public int compare(SinhVien o1, SinhVien o2) {
-                if(o1.getDiem() > o2.getDiem()){
+                if (o1.getDiem() > o2.getDiem()) 
                     return -1;
-                }else return 1;
+                else 
+                    return 1;
             }
         };
         Collections.sort(list, cmp);
     }
-    
-    public void orderByName(){
+
+    public void orderByName() {
         Comparator<SinhVien> cmp = new Comparator<SinhVien>() {
             @Override
             public int compare(SinhVien o1, SinhVien o2) {
-                 return o1.getName().compareTo(o2.getName());
-            };
+                return o1.getName().compareTo(o2.getName());
+            }
+        ;
         };
         Collections.sort(list, cmp);
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -148,7 +149,7 @@ public class bai1 extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblQuanLyThuVien.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblQuanLyThuVien.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
         lblQuanLyThuVien.setForeground(new java.awt.Color(255, 0, 0));
         lblQuanLyThuVien.setText("Quan Ly Thu Vien");
 
@@ -238,10 +239,6 @@ public class bai1 extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(173, 173, 173)
-                .addComponent(lblQuanLyThuVien)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,18 +254,18 @@ public class bai1 extends javax.swing.JFrame {
                                 .addGap(5, 5, 5)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtKhoaHoc, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                                            .addComponent(txtDiem)
-                                            .addComponent(txtHoVaTen))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtXepLoai, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(34, 34, 34)
                                                 .addComponent(chkCoPhanThuong)))
-                                        .addGap(203, 203, 203)))
+                                        .addGap(203, 203, 203))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtKhoaHoc, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                                            .addComponent(txtDiem)
+                                            .addComponent(txtHoVaTen))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnNhapMoi)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -280,12 +277,17 @@ public class bai1 extends javax.swing.JFrame {
                             .addComponent(btnSapXepTheoDiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSapXepTheoTen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(29, 29, 29))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(206, 206, 206)
+                .addComponent(lblQuanLyThuVien, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(lblQuanLyThuVien, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -313,7 +315,7 @@ public class bai1 extends javax.swing.JFrame {
                         .addComponent(btnNhapMoi)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkCoPhanThuong)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
